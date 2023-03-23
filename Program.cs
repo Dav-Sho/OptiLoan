@@ -10,6 +10,7 @@ global using System.Text.RegularExpressions;
 global using OptiLoan.Services.Implementation;
 global using System.Security.Claims;
 global using Microsoft.IdentityModel.Tokens;
+global using OptiLoan.enums;
 
 var builder = WebApplication.CreateBuilder(args);
 

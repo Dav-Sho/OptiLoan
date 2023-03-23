@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OptiLoan.Data;
 
@@ -11,9 +12,11 @@ using OptiLoan.Data;
 namespace OptiLoan.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230323103525_Agent_SuperAgent_MasterAgent_Staff_Class")]
+    partial class Agent_SuperAgent_MasterAgent_Staff_Class
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,18 +43,20 @@ namespace OptiLoan.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SuperAgentCode")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SuperAgentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SuperAgentId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("userId");
 
                     b.ToTable("Agents");
                 });
@@ -74,18 +79,20 @@ namespace OptiLoan.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrganizationCode")
+                        .HasColumnType("int");
+
                     b.Property<int?>("OrganizationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("userId");
 
                     b.ToTable("MasterAgents");
                 });
@@ -131,18 +138,20 @@ namespace OptiLoan.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrganizationCode")
+                        .HasColumnType("int");
+
                     b.Property<int?>("OrganizationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("userId");
 
                     b.ToTable("Staffs");
                 });
@@ -161,6 +170,9 @@ namespace OptiLoan.Migrations
                     b.Property<int>("Class")
                         .HasColumnType("int");
 
+                    b.Property<int>("MasterAgentCode")
+                        .HasColumnType("int");
+
                     b.Property<int?>("MasterAgentId")
                         .HasColumnType("int");
 
@@ -168,15 +180,14 @@ namespace OptiLoan.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MasterAgentId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("userId");
 
                     b.ToTable("SuperAgents");
                 });
@@ -217,10 +228,8 @@ namespace OptiLoan.Migrations
                         .HasForeignKey("SuperAgentId");
 
                     b.HasOne("OptiLoan.Models.User", "user")
-                        .WithOne("Agent")
-                        .HasForeignKey("OptiLoan.Models.Agent", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Agent")
+                        .HasForeignKey("userId");
 
                     b.Navigation("SuperAgent");
 
@@ -234,10 +243,8 @@ namespace OptiLoan.Migrations
                         .HasForeignKey("OrganizationId");
 
                     b.HasOne("OptiLoan.Models.User", "user")
-                        .WithOne("MasterAgent")
-                        .HasForeignKey("OptiLoan.Models.MasterAgent", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("MasterAgent")
+                        .HasForeignKey("userId");
 
                     b.Navigation("Organization");
 
@@ -262,10 +269,8 @@ namespace OptiLoan.Migrations
                         .HasForeignKey("OrganizationId");
 
                     b.HasOne("OptiLoan.Models.User", "user")
-                        .WithOne("Staff")
-                        .HasForeignKey("OptiLoan.Models.Staff", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Staff")
+                        .HasForeignKey("userId");
 
                     b.Navigation("Organization");
 
@@ -279,10 +284,8 @@ namespace OptiLoan.Migrations
                         .HasForeignKey("MasterAgentId");
 
                     b.HasOne("OptiLoan.Models.User", "user")
-                        .WithOne("SuperAgent")
-                        .HasForeignKey("OptiLoan.Models.SuperAgent", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("SuperAgent")
+                        .HasForeignKey("userId");
 
                     b.Navigation("MasterAgent");
 
