@@ -17,6 +17,7 @@ namespace OptiLoan.Controllers
             
         }
 
+//       routes
         [HttpPost("Register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register([FromBody]UserRegisterDto userDto){
             if(!ModelState.IsValid) {
@@ -26,6 +27,17 @@ namespace OptiLoan.Controllers
             return Ok(await _authService.Resgister(
                 new User{Username = userDto.Username, Email = userDto.Email}, userDto.Password
             ));
+        }
+
+
+//      Login Routes
+        [HttpPost("Login")]
+        public async Task<ActionResult<ServiceResponse<int>>> Login([FromBody]UserLoginDto userDto){
+            if(!ModelState.IsValid) {
+                return BadRequest(userDto);
+            }
+
+            return Ok(await _authService.Login(userDto.Email, userDto.Password));
         }
     }
 }

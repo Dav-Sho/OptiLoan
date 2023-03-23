@@ -18,9 +18,38 @@ namespace OptiLoan.Services.Implementation
             _Context = context;
             
         }
-        public Task<ServiceResponse<string>> Login(string email, string password)
+
+        // Login User
+        public async Task<ServiceResponse<string>> Login(string email, string password)
         {
-            throw new NotImplementedException();
+            // create response object
+            var response = new ServiceResponse<string>();
+            
+            try{
+                // check if user exist
+                var user = await _Context.Users.FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
+                if(user is null) {
+                    response.Success = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Message = "Invalid Credentials";
+                    return response;
+                }else if(!comparePassword(password, user.PasswordHash, user.PasswordSalt)){ //compare password
+                    response.Success = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Message = "Invalid Credentials";
+                    return response;
+                }else{
+                    response.Data = createToken(user);
+                    response.StatusCode = HttpStatusCode.OK;
+                    response.Message = "User Login";
+                    return response;
+                }
+            }catch(Exception ex){
+            response.Success = false;
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            response.Message = ex.Message;
+            return response;
+            }
         }
 
         // Register User
@@ -102,6 +131,14 @@ namespace OptiLoan.Services.Implementation
             using(var hmac = new System.Security.Cryptography.HMACSHA512()) {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        // Compare user Password with the one in database
+        private bool comparePassword(string password, byte[] passwordHash, byte[] passwordSalt) {
+            using(var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt)) {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
             }
         }
 
