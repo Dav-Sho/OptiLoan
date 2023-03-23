@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
 using System.Threading.Tasks;
+
 
 namespace OptiLoan.Services.Implementation
 {
     public class AuthImpl : AuthService
     {
         public DataContext _Context;
-        public AuthImpl(DataContext context)
+        private readonly IConfiguration _configuration;
+        public AuthImpl(DataContext context, IConfiguration configuration)
         {
+            _configuration = configuration;
             _Context = context;
             
         }
@@ -20,10 +24,10 @@ namespace OptiLoan.Services.Implementation
         }
 
         // Register User
-        public async Task<ServiceResponse<int>> Resgister(User user, string password)
+        public async Task<ServiceResponse<string>> Resgister(User user, string password)
         {
             // create response object
-            var response = new ServiceResponse<int>();
+            var response = new ServiceResponse<string>();
             var hasNumber = new Regex(@"[0-9]+");
             var hasUperChar = new Regex(@"[A-Z]+");
             var hasLowerChar = new Regex(@"[a-z]+");
@@ -71,7 +75,7 @@ namespace OptiLoan.Services.Implementation
             // save database
             await _Context.SaveChangesAsync();
             // user response
-            response.Data = user.Id;
+            response.Data = createToken(user);
             response.StatusCode = HttpStatusCode.Created;
             response.Message = "User Created";
             return response;
@@ -99,6 +103,34 @@ namespace OptiLoan.Services.Implementation
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
+        }
+
+        // Create token
+        private string createToken(User user) {
+            var claims = new List<Claim>{
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Email)
+            };
+
+            var AppSetting = _configuration.GetSection("AppSetting:Token").Value;
+
+            if(AppSetting is null) {
+                throw new Exception("App Setting not found");
+            }
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(AppSetting));
+
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor{
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1)
+            };
+
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
     }

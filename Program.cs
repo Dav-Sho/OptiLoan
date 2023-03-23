@@ -8,6 +8,8 @@ global using OptiLoan.Services;
 global using System.ComponentModel.DataAnnotations;
 global using System.Text.RegularExpressions;
 global using OptiLoan.Services.Implementation;
+global using System.Security.Claims;
+global using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
