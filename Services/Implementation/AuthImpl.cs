@@ -45,10 +45,11 @@ namespace OptiLoan.Services.Implementation
                     return response;
                 }
             }catch(Exception ex){
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.InternalServerError;
-            response.Message = ex.Message;
-            return response;
+
+                response.Success = false;
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Message = ex.Message;
+                return response;
             }
         }
 
