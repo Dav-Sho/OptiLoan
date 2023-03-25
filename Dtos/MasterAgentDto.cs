@@ -14,9 +14,7 @@ namespace OptiLoan.Dtos
         public int AccountNumber { get; set; }
 
         [Required(ErrorMessage = "Organization code required")]
-        public int OrganizationCode { get; set; }
+        public int OrganizationId { get; set; }
         // public int OrganizationCode { get; set; }
-        [Required(ErrorMessage = "Organisation Type is required=> Example SuperAgent")]
-        public OrganizationClass Class { get; set; }
     }
 }

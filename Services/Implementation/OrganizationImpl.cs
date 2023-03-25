@@ -18,6 +18,7 @@ namespace OptiLoan.Services.Implementation
             
         }
 
+        // Get login user id
         private int GetUserId() => int.Parse(_contextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         public async Task<ServiceResponse<GetOrganizationDto>> CreateOrganisation(OrganizationDto organizationDto)
         {

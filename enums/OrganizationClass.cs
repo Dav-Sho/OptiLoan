@@ -1,11 +1,11 @@
 namespace OptiLoan.enums
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum OrganizationClass
+    public class OrganizationClass
     {
-        Agent,
-        SuperAgent,
-        MasterAgent,
-        Staff
+        public string  Agent { get; set; } = string.Empty;
+        public string  SuperAgent { get; set; } = string.Empty;
+        public string  MasterAgent { get; set; } = "Master Agent";
+        public string  Staff { get; set; } = string.Empty;
     }
 }

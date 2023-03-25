@@ -9,8 +9,7 @@ namespace OptiLoan.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int UserId { get; set; }
         public int AccountNumber { get; set; }
-        public OrganizationClass Class { get; set; }
+        public string  UserClass { get; set; } = string.Empty;
     }
 }

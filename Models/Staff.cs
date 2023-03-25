@@ -14,7 +14,7 @@ namespace OptiLoan.Models
         public int AccountNumber { get; set; }
         public Organization? Organization { get; set; }
         // public int OrganizationCode { get; set; }
-        public OrganizationClass Class { get; set; }
+        public string UserClass { get; set; } = string.Empty;
         
     }
 }

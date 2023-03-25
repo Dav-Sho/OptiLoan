@@ -15,6 +15,6 @@ namespace OptiLoan.Models
         public List<Agent>? Agents { get; set; }
         public MasterAgent? MasterAgent { get; set; }
         // public int MasterAgentCode { get; set; }
-        public OrganizationClass Class { get; set; }
+        public string UserClass { get; set; } = string.Empty;
     }
 }

@@ -15,6 +15,6 @@ namespace OptiLoan.Models
         public int AccountNumber { get; set; }
         public SuperAgent? SuperAgent { get; set; }
         // public int SuperAgentCode { get; set; }
-        public OrganizationClass Class { get; set; }
+        public string UserClass { get; set; } = string.Empty;
     }
 }
