@@ -10,6 +10,8 @@ namespace OptiLoan.Services
         Task<ServiceResponse<GetOrganizationDto>> CreateOrganisation(OrganizationDto organizationDto);
 
         Task<ServiceResponse<List<GetMasterAgentDto>>> MasterAgentUnderOrganisation(int organisationId);
+
+        Task<ServiceResponse<List<GetStaffDto>>> StaffUnderOrganization(int organisationId);
         
     }
 }
