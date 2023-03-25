@@ -43,5 +43,43 @@ namespace OptiLoan.Services.Implementation
                 return response;
             }
         }
+
+        public async Task<ServiceResponse<List<GetMasterAgentDto>>> MasterAgentUnderOrganisation(int organisationId)
+        {
+            var response = new ServiceResponse<List<GetMasterAgentDto>>();
+
+            try{
+                var organization = await _context.Organizations.FirstOrDefaultAsync(o => o.Id == organisationId);
+
+                if(organization is null) {
+                    response.Success = false;
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Message = "Organisation not found";
+                    return response;
+                }
+
+                // find the list of master under under the specific user
+                var masterAgent = await _context.MasterAgents.Where(c => c.Organization == organization).ToListAsync();
+
+                // check if there is no master agent under the organisation
+                if(organization is null) {
+                    response.Success = false;
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Message = "Organisation not found";
+                    return response;
+                }
+
+                response.Data = masterAgent.Select(m => _mapper.Map<GetMasterAgentDto>(m)).ToList();
+                response.StatusCode = HttpStatusCode.OK;
+                response.Message = "List of MasterAgent under Organisation";
+                return response;
+
+            }catch(Exception ex){
+                response.Success = false;
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
     }
 }

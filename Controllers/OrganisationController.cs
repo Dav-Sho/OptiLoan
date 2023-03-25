@@ -26,5 +26,11 @@ namespace OptiLoan.Controllers
             return Ok(await _organisationService.CreateOrganisation(organizationDto));
         }
 
+        [AllowAnonymous]
+        [HttpGet("GetListOfMasterAgentUnderOrganisation")]
+        public async Task<ActionResult<List<GetMasterAgentDto>>> MasterAgentUnderOrganisation(int organisationId) {
+            return Ok(await _organisationService.MasterAgentUnderOrganisation(organisationId));
+        }
+
     }
 }
