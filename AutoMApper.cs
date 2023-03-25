@@ -13,6 +13,8 @@ namespace OptiLoan
             CreateMap<MasterAgent, GetMasterAgentDto>();
             CreateMap<OrganizationDto, Organization>();
             CreateMap<Organization, GetOrganizationDto>();
+            CreateMap<StaffDto, Staff>();
+            CreateMap<Staff, GetStaffDto>();
         }
     }
 }
