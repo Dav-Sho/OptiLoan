@@ -49,8 +49,10 @@ namespace OptiLoan.Services.Implementation
             var response = new ServiceResponse<List<GetMasterAgentDto>>();
 
             try{
+                  // find organisation
                 var organization = await _context.Organizations.FirstOrDefaultAsync(o => o.Id == organisationId);
 
+                // check if organisation is found
                 if(organization is null) {
                     response.Success = false;
                     response.StatusCode = HttpStatusCode.NotFound;
@@ -68,7 +70,7 @@ namespace OptiLoan.Services.Implementation
                     response.Message = "Organisation not found";
                     return response;
                 }
-
+                // return list of staff object & response
                 response.Data = masterAgent.Select(m => _mapper.Map<GetMasterAgentDto>(m)).ToList();
                 response.StatusCode = HttpStatusCode.OK;
                 response.Message = $"List of MasterAgent under Organisation: {organization.Name}";
