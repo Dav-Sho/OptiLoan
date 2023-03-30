@@ -43,6 +43,7 @@ builder.Services.AddScoped<AuthService, AuthImpl>();
 builder.Services.AddScoped<OrganisationService, OrganizationImpl>();
 builder.Services.AddScoped<MasterAgentService, MasterAgentImpl>();
 builder.Services.AddScoped<StaffService, StaffImpl>();
+builder.Services.AddScoped<SuperAgentService, SuperAgentImpl>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
     options => {
         options.TokenValidationParameters = new TokenValidationParameters{

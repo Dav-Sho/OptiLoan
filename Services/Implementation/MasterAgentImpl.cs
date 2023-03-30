@@ -66,5 +66,40 @@ namespace OptiLoan.Services.Implementation
                 return response;
             }
         }
+
+        public async Task<ServiceResponse<List<GetSuperAgent>>> GetListOfSuperAgentUnderMasterAgent(int masterAgentId)
+        {
+            var response = new ServiceResponse<List<GetSuperAgent>>();
+            try{
+                var masterAgent = await _context.MasterAgents.FirstOrDefaultAsync(x => x.Id == masterAgentId);
+
+                if(masterAgent is null) {
+                    response.Success = false;
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Message = $"Master Agent not found with the id {masterAgentId}";
+                    return response;
+                }
+
+                var superGent = await _context.SuperAgents.Where(x => x.MasterAgent == masterAgent).ToListAsync();
+
+                if(superGent is null){
+                    response.Success = false;
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Message = $"Master Agent not found with the id {masterAgentId}";
+                    return response;
+                }
+
+                response.Data = superGent.Select(x => _mapper.Map<GetSuperAgent>(x)).ToList();
+                response.StatusCode = HttpStatusCode.OK;
+                response.Message = "Get List of Super Agent Under Master";
+                return response;
+
+            }catch(Exception ex) {
+                response.Success = false;
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
     }
 }

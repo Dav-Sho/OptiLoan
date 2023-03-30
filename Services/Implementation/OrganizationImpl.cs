@@ -64,10 +64,10 @@ namespace OptiLoan.Services.Implementation
                 var masterAgent = await _context.MasterAgents.Where(c => c.Organization == organization).ToListAsync();
 
                 // check if there is no master agent under the organisation
-                if(organization is null) {
+                if(masterAgent is null) {
                     response.Success = false;
                     response.StatusCode = HttpStatusCode.NotFound;
-                    response.Message = "Organisation not found";
+                    response.Message = "Master not found";
                     return response;
                 }
                 // return list of staff object & response
